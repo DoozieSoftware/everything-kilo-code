@@ -48,7 +48,7 @@ Follow these commit message conventions based on 500 analyzed commits.
 *Commit message example*
 
 ```text
-feat(ecc2): add crash resume session recovery
+feat: add everything-claude-code ECC bundle (.claude/commands/add-or-update-skill-documentation.md)
 ```
 
 *Commit message example*
@@ -78,19 +78,19 @@ security: remove supply chain risks, external promotions, and unauthorized credi
 *Commit message example*
 
 ```text
-feat: scaffold ECC 2.0 Rust TUI — agentic IDE control plane
+feat: add everything-claude-code ECC bundle (.claude/commands/feature-development.md)
 ```
 
 *Commit message example*
 
 ```text
-feat(skills): add santa-method - multi-agent adversarial verification (#760)
+feat: add everything-claude-code ECC bundle (.claude/commands/database-migration.md)
 ```
 
 *Commit message example*
 
 ```text
-feat: pending instinct TTL pruning and /prune command (#725)
+feat: add everything-claude-code ECC bundle (.claude/enterprise/controls.md)
 ```
 
 ## Architecture
@@ -200,16 +200,16 @@ Database schema changes with migration files
 
 **Example commit sequence**:
 ```
-feat(rules): add C# language support (#704)
-fix: sanitize SessionStart session summaries (#710)
-feat: add MCP health-check hook (#711)
+Add Turkish (tr) docs and update README (#744)
+docs(zh-CN): translate code block(plain text) (#753)
+fix(install): add rust, cpp, csharp to legacy language alias map (#747)
 ```
 
 ### Feature Development
 
 Standard feature implementation workflow
 
-**Frequency**: ~16 times per month
+**Frequency**: ~21 times per month
 
 **Steps**:
 1. Add feature implementation
@@ -223,199 +223,126 @@ Standard feature implementation workflow
 
 **Example commit sequence**:
 ```
-feat: agent description compression with lazy loading (#696)
-feat: add nuxt 4 patterns skill (#702)
-feat(rules): add C# language support (#704)
+docs(pt-BR): add rules translation
+docs(pt-BR): add examples translation
+docs(pt-BR): add commands translation
 ```
 
-### Add Or Update Skill Documentation
+### Add Or Update Skill
 
-Adds a new skill or updates documentation for an existing skill, typically in the form of a SKILL.md file under skills/ or skills/*/SKILL.md, sometimes with translations in docs/xx/skills/*/SKILL.md.
+Adds a new skill or updates documentation for an existing skill.
 
-**Frequency**: ~3 times per month
+**Frequency**: ~2 times per month
 
 **Steps**:
-1. Create or update skills/<skill-name>/SKILL.md
-2. Optionally update docs/xx/skills/<skill-name>/SKILL.md for translations
-3. Commit with a message referencing the skill and a summary of changes
+1. Create or update SKILL.md in the relevant skills directory.
+2. Optionally add architecture diagrams, implementation notes, or integration guidance.
 
 **Files typically involved**:
 - `skills/*/SKILL.md`
 - `docs/zh-CN/skills/*/SKILL.md`
 - `docs/tr/skills/*/SKILL.md`
-- `docs/pt-BR/skills/*/SKILL.md`
 
 **Example commit sequence**:
 ```
-Create or update skills/<skill-name>/SKILL.md
-Optionally update docs/xx/skills/<skill-name>/SKILL.md for translations
-Commit with a message referencing the skill and a summary of changes
-```
-
-### Add Or Update Agent Documentation
-
-Adds or updates documentation for agents, usually in agents/ or docs/xx/agents/ directories.
-
-**Frequency**: ~2 times per month
-
-**Steps**:
-1. Create or update agents/<agent-name>.md
-2. Optionally update docs/xx/agents/<agent-name>.md for translations
-3. Update AGENTS.md if catalog changes
-4. Commit changes
-
-**Files typically involved**:
-- `agents/*.md`
-- `docs/zh-CN/agents/*.md`
-- `docs/tr/agents/*.md`
-- `docs/pt-BR/agents/*.md`
-- `AGENTS.md`
-
-**Example commit sequence**:
-```
-Create or update agents/<agent-name>.md
-Optionally update docs/xx/agents/<agent-name>.md for translations
-Update AGENTS.md if catalog changes
-Commit changes
-```
-
-### Add Or Update Command Documentation
-
-Adds or updates documentation for CLI commands, including translations.
-
-**Frequency**: ~2 times per month
-
-**Steps**:
-1. Create or update commands/<command>.md
-2. Optionally update docs/xx/commands/<command>.md for translations
-3. Commit changes
-
-**Files typically involved**:
-- `commands/*.md`
-- `docs/zh-CN/commands/*.md`
-- `docs/tr/commands/*.md`
-- `docs/pt-BR/commands/*.md`
-
-**Example commit sequence**:
-```
-Create or update commands/<command>.md
-Optionally update docs/xx/commands/<command>.md for translations
-Commit changes
-```
-
-### Add Or Update Language Support
-
-Adds support for a new programming language or updates language-specific rules, including documentation and test files.
-
-**Frequency**: ~2 times per month
-
-**Steps**:
-1. Add or update rules/<language>/*.md (coding-style, hooks, patterns, security, testing)
-2. Update manifests/install-components.json or scripts/lib/install-manifests.js if needed
-3. Add or update tests/lib/install-manifests.test.js
-4. Optionally update translations in docs/xx/rules/<language>/*.md
-5. Commit changes
-
-**Files typically involved**:
-- `rules/*/*.md`
-- `manifests/install-components.json`
-- `scripts/lib/install-manifests.js`
-- `tests/lib/install-manifests.test.js`
-- `docs/zh-CN/rules/*/*.md`
-- `docs/tr/rules/*/*.md`
-- `docs/pt-BR/rules/*/*.md`
-
-**Example commit sequence**:
-```
-Add or update rules/<language>/*.md (coding-style, hooks, patterns, security, testing)
-Update manifests/install-components.json or scripts/lib/install-manifests.js if needed
-Add or update tests/lib/install-manifests.test.js
-Optionally update translations in docs/xx/rules/<language>/*.md
-Commit changes
+Create or update SKILL.md in the relevant skills directory.
+Optionally add architecture diagrams, implementation notes, or integration guidance.
 ```
 
 ### Add Or Update Localization
 
-Adds or updates documentation translations for a new or existing language (e.g., zh-CN, tr, pt-BR).
+Adds or updates documentation translations for a new or existing language.
 
 **Frequency**: ~2 times per month
 
 **Steps**:
-1. Create or update docs/<lang>/* (README.md, AGENTS.md, commands/, agents/, skills/, rules/ etc.)
-2. Update README.md to add or update language links and counts
-3. Commit changes
+1. Add or update docs in docs/<lang>/ for agents, commands, skills, rules, and examples.
+2. Update README.md to reference the new or updated language.
+3. Optionally increment language count in README.
 
 **Files typically involved**:
 - `docs/zh-CN/**/*`
-- `docs/tr/**/*`
 - `docs/pt-BR/**/*`
+- `docs/tr/**/*`
 - `README.md`
 
 **Example commit sequence**:
 ```
-Create or update docs/<lang>/* (README.md, AGENTS.md, commands/, agents/, skills/, rules/ etc.)
-Update README.md to add or update language links and counts
-Commit changes
+Add or update docs in docs/<lang>/ for agents, commands, skills, rules, and examples.
+Update README.md to reference the new or updated language.
+Optionally increment language count in README.
 ```
 
-### Add Or Update Hook Script
+### Add Or Update Command Doc
 
-Adds or updates automation hooks (e.g., for config protection, health checks, etc.), including configuration and test files.
+Adds or updates documentation for a CLI command.
 
 **Frequency**: ~2 times per month
 
 **Steps**:
-1. Create or update scripts/hooks/<hook-name>.js
-2. Update hooks/hooks.json to register the hook
-3. Optionally add or update tests in tests/hooks/ or tests/integration/
-4. Commit changes
+1. Create or update a markdown file in commands/ or docs/<lang>/commands/.
+2. Optionally update README.md or AGENTS.md to reflect the new/updated command.
 
 **Files typically involved**:
-- `scripts/hooks/*.js`
+- `commands/*.md`
+- `docs/zh-CN/commands/*.md`
+- `docs/pt-BR/commands/*.md`
+- `docs/tr/commands/*.md`
+- `README.md`
+- `AGENTS.md`
+
+**Example commit sequence**:
+```
+Create or update a markdown file in commands/ or docs/<lang>/commands/.
+Optionally update README.md or AGENTS.md to reflect the new/updated command.
+```
+
+### Feature Development With Tests And Docs
+
+Implements a new feature, adds or updates tests, and documents the change.
+
+**Frequency**: ~2 times per month
+
+**Steps**:
+1. Implement or modify feature code (e.g., in src/, scripts/, or main code directories).
+2. Update or add relevant tests in tests/.
+3. Update or add documentation in docs/ or README.md.
+
+**Files typically involved**:
+- `src/**/*`
+- `scripts/**/*`
+- `tests/**/*`
+- `docs/**/*`
+- `README.md`
+
+**Example commit sequence**:
+```
+Implement or modify feature code (e.g., in src/, scripts/, or main code directories).
+Update or add relevant tests in tests/.
+Update or add documentation in docs/ or README.md.
+```
+
+### Add Or Update Hook
+
+Adds or modifies a project hook for linting, formatting, or config protection.
+
+**Frequency**: ~2 times per month
+
+**Steps**:
+1. Edit or add hook configuration in hooks/hooks.json.
+2. Implement or update hook logic in scripts/hooks/.
+3. Optionally update related plugin files.
+
+**Files typically involved**:
 - `hooks/hooks.json`
-- `tests/hooks/*.test.js`
-- `tests/integration/*.test.js`
+- `scripts/hooks/*.js`
+- `.opencode/plugins/*.ts`
 
 **Example commit sequence**:
 ```
-Create or update scripts/hooks/<hook-name>.js
-Update hooks/hooks.json to register the hook
-Optionally add or update tests in tests/hooks/ or tests/integration/
-Commit changes
-```
-
-### Add Or Update Ecc Bundle
-
-Adds or updates an ECC bundle, which includes a set of configuration, skill, rule, and agent files under .claude/, .agents/, .codex/, etc.
-
-**Frequency**: ~2 times per month
-
-**Steps**:
-1. Add or update .claude/skills/<bundle>/SKILL.md
-2. Add or update .agents/skills/<bundle>/SKILL.md
-3. Add or update .agents/skills/<bundle>/agents/*.yaml
-4. Add or update .claude/commands/*.md, .claude/rules/*.md, .claude/team/*.json, .claude/ecc-tools.json, etc.
-5. Add or update .codex/agents/*.toml
-6. Commit changes
-
-**Files typically involved**:
-- `.claude/skills/*/SKILL.md`
-- `.agents/skills/*/SKILL.md`
-- `.agents/skills/*/agents/*.yaml`
-- `.claude/commands/*.md`
-- `.claude/rules/*.md`
-- `.claude/team/*.json`
-- `.claude/ecc-tools.json`
-- `.codex/agents/*.toml`
-
-**Example commit sequence**:
-```
-Add or update .claude/skills/<bundle>/SKILL.md
-Add or update .agents/skills/<bundle>/SKILL.md
-Add or update .agents/skills/<bundle>/agents/*.yaml
-Add or update .claude/commands/*.md, .claude/rules/*.md, .claude/team/*.json, .claude/ecc-tools.json, etc.
-Add or update .codex/agents/*.toml
-Commit changes
+Edit or add hook configuration in hooks/hooks.json.
+Implement or update hook logic in scripts/hooks/.
+Optionally update related plugin files.
 ```
 
 
