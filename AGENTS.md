@@ -1,8 +1,8 @@
-# Everything Claude Code (ECC) — Agent Instructions
+# Everything Kilo Code (EKC) — Agent Instructions
 
-This is a **production-ready AI coding plugin** providing 30 specialized agents, 136 skills, 60 commands, and automated hook workflows for software development.
+This is a **production-ready Kilo CLI coding plugin** providing 30 specialized agents, 136 skills, 60 commands, and MCP configurations for software development.
 
-**Version:** 1.9.0
+**Version:** 1.0.0
 
 ## Core Principles
 

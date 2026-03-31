@@ -1,0 +1,123 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "instructions": [
+    "rules/common/**/*.md",
+    "rules/typescript/**/*.md",
+    "rules/php/**/*.md"
+  ],
+  "skills": {
+    "paths": [".kilo/skill"]
+  },
+  "mcp": {
+    "sequential-thinking": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": true
+    },
+    "memory": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
+      "enabled": true
+    },
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@upstash/context7-mcp@latest"],
+      "enabled": true
+    },
+    "github": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "enabled": false,
+      "environment": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PAT_HERE"
+      }
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": ["npx", "-y", "firecrawl-mcp"],
+      "enabled": false,
+      "environment": {
+        "FIRECRAWL_API_KEY": "YOUR_FIRECRAWL_KEY_HERE"
+      }
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp", "--browser", "chrome"],
+      "enabled": false
+    },
+    "exa-web-search": {
+      "type": "local",
+      "command": ["npx", "-y", "exa-mcp-server"],
+      "enabled": false,
+      "environment": {
+        "EXA_API_KEY": "YOUR_EXA_API_KEY_HERE"
+      }
+    },
+    "supabase": {
+      "type": "local",
+      "command": ["npx", "-y", "@supabase/mcp-server-supabase@latest"],
+      "enabled": false
+    },
+    "vercel": {
+      "type": "remote",
+      "url": "https://mcp.vercel.com",
+      "enabled": false
+    },
+    "railway": {
+      "type": "local",
+      "command": ["npx", "-y", "@railway/mcp-server"],
+      "enabled": false
+    },
+    "cloudflare-docs": {
+      "type": "remote",
+      "url": "https://docs.mcp.cloudflare.com/mcp",
+      "enabled": false
+    },
+    "clickhouse": {
+      "type": "remote",
+      "url": "https://mcp.clickhouse.cloud/mcp",
+      "enabled": false
+    },
+    "magic": {
+      "type": "local",
+      "command": ["npx", "-y", "@magicuidesign/mcp@latest"],
+      "enabled": false
+    },
+    "filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/path/to/your/projects"],
+      "enabled": false
+    },
+    "fal-ai": {
+      "type": "local",
+      "command": ["npx", "-y", "fal-ai-mcp-server"],
+      "enabled": false,
+      "environment": {
+        "FAL_KEY": "YOUR_FAL_KEY_HERE"
+      }
+    },
+    "browserbase": {
+      "type": "local",
+      "command": ["npx", "-y", "@browserbasehq/mcp-server-browserbase"],
+      "enabled": false,
+      "environment": {
+        "BROWSERBASE_API_KEY": "YOUR_BROWSERBASE_KEY_HERE"
+      }
+    },
+    "token-optimizer": {
+      "type": "local",
+      "command": ["npx", "-y", "token-optimizer-mcp"],
+      "enabled": false
+    },
+    "confluence": {
+      "type": "local",
+      "command": ["npx", "-y", "confluence-mcp-server"],
+      "enabled": false,
+      "environment": {
+        "CONFLUENCE_BASE_URL": "YOUR_CONFLUENCE_URL_HERE",
+        "CONFLUENCE_EMAIL": "YOUR_EMAIL_HERE",
+        "CONFLUENCE_API_TOKEN": "YOUR_CONFLUENCE_TOKEN_HERE"
+      }
+    }
+  }
+}

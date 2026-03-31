@@ -2,6 +2,7 @@ const antigravityProject = require('./antigravity-project');
 const claudeHome = require('./claude-home');
 const codexHome = require('./codex-home');
 const cursorProject = require('./cursor-project');
+const kiloHome = require('./kilo-home');
 const opencodeHome = require('./opencode-home');
 
 const ADAPTERS = Object.freeze([
@@ -9,6 +10,7 @@ const ADAPTERS = Object.freeze([
   cursorProject,
   antigravityProject,
   codexHome,
+  kiloHome,
   opencodeHome,
 ]);
 

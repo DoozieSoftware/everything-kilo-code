@@ -1,0 +1,49 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "instructions": [
+    "rules/common/**/*.md",
+    "rules/typescript/**/*.md",
+    "rules/php/**/*.md"
+  ],
+  "skills": {
+    "paths": ["skill"]
+  },
+  "mcp": {
+    "sequential-thinking": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": true
+    },
+    "memory": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
+      "enabled": true
+    },
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@upstash/context7-mcp@latest"],
+      "enabled": true
+    },
+    "github": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "enabled": false,
+      "environment": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PAT_HERE"
+      }
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp", "--browser", "chrome"],
+      "enabled": false
+    },
+    "exa-web-search": {
+      "type": "local",
+      "command": ["npx", "-y", "exa-mcp-server"],
+      "enabled": false,
+      "environment": {
+        "EXA_API_KEY": "YOUR_EXA_API_KEY_HERE"
+      }
+    }
+  }
+}
