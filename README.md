@@ -36,7 +36,7 @@
 
 Not just configs. A complete system: skills, instincts, memory optimization, continuous learning, security scanning, and research-first development. Production-ready agents, hooks, commands, rules, and MCP configurations evolved over 10+ months of intensive daily use building real products.
 
-Works across **Claude Code**, **Codex**, **Cowork**, and other AI agent harnesses.
+Works across **Claude Code**, **Kilo CLI**, **Codex**, **Cowork**, and other AI agent harnesses.
 
 ---
 
@@ -886,6 +886,7 @@ Each component is fully independent.
 Yes. ECC is cross-platform:
 - **Cursor**: Pre-translated configs in `.cursor/`. See [Cursor IDE Support](#cursor-ide-support).
 - **OpenCode**: Full plugin support in `.opencode/`. See [OpenCode Support](#-opencode-support).
+- **Kilo CLI**: Full support with `--target kilo`. Installs to `~/.config/kilo/`. See [Kilo CLI Support](#kilo-cli-support).
 - **Codex**: First-class support for both macOS app and CLI, with adapter drift guards and SessionStart fallback. See PR [#257](https://github.com/affaan-m/everything-claude-code/pull/257).
 - **Antigravity**: Tightly integrated setup for workflows, skills, and flattened rules in `.agent/`. See [Antigravity Guide](docs/ANTIGRAVITY-GUIDE.md).
 - **Claude Code**: Native — this is the primary target.
@@ -1212,13 +1213,116 @@ For the full ECC OpenCode setup, either:
 
 ---
 
+## Kilo CLI Support
+
+ECC provides **full Kilo CLI support** with native install target. Agents, commands, skills, rules, and MCP configs are automatically adapted to Kilo's directory structure (`~/.config/kilo/`).
+
+### Quick Start
+
+```bash
+# Clone the repo
+git clone https://github.com/DoozieSoftware/everything-claude-code.git
+cd everything-claude-code
+
+# Install dependencies
+npm install
+
+# Install for Kilo CLI (full profile)
+./install.sh --target kilo --profile full
+
+# Or install specific languages
+./install.sh --target kilo typescript php python
+```
+
+### What Gets Installed
+
+| Component | Kilo Location | Count |
+|-----------|---------------|-------|
+| Agents | `~/.config/kilo/agent/*.md` | 30 |
+| Commands | `~/.config/kilo/command/*.md` | 60 |
+| Skills | `~/.config/kilo/skill/*/SKILL.md` | 136 |
+| Rules | `~/.config/kilo/rules/{common,typescript,php,...}/` | 77 |
+| MCP Config | `~/.config/kilo/kilo.jsonc` | 19 servers |
+
+### Directory Mapping
+
+Kilo uses singular directory names (unlike Claude Code's plurals):
+
+| ECC Source | Kilo Target |
+|------------|-------------|
+| `agents/*.md` | `~/.config/kilo/agent/*.md` |
+| `commands/*.md` | `~/.config/kilo/command/*.md` |
+| `skills/*/SKILL.md` | `~/.config/kilo/skill/*/SKILL.md` |
+| `rules/**` | `~/.config/kilo/rules/**` |
+| `mcp-configs/` | `~/.config/kilo/kilo.jsonc` (mcp key) |
+
+### Configuration
+
+The installer creates `~/.config/kilo/kilo.jsonc` with:
+- **Instructions** pointing to rules (`common`, `typescript`, `php`)
+- **Skills paths** pointing to `skill` directory
+- **MCP servers** — 3 enabled by default (`sequential-thinking`, `memory`, `context7`)
+- **16 additional MCP servers** available but disabled (enable as needed)
+
+### MCP Servers (Enabled by Default)
+
+| Server | Purpose |
+|--------|---------|
+| `sequential-thinking` | Chain-of-thought reasoning |
+| `memory` | Persistent memory across sessions |
+| `context7` | Live documentation lookup |
+
+### Enabling More MCPs
+
+Edit `~/.config/kilo/kilo.jsonc` and set `enabled: true` on any server:
+
+```jsonc
+"github": {
+  "type": "local",
+  "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+  "enabled": true,
+  "environment": {
+    "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
+  }
+}
+```
+
+Restart Kilo after config changes.
+
+### Key Differences from Claude Code
+
+| Feature | Claude Code | Kilo CLI |
+|---------|-------------|----------|
+| Config dir | `~/.claude/` | `~/.config/kilo/` |
+| Agents dir | `~/.claude/agents/` | `~/.config/kilo/agent/` (singular) |
+| Commands dir | `~/.claude/commands/` | `~/.config/kilo/command/` (singular) |
+| Skills dir | `~/.claude/skills/` | `~/.config/kilo/skill/` (singular) |
+| Rules | `~/.claude/rules/` | `kilo.jsonc` instructions field |
+| MCP config | `~/.claude.json` | `kilo.jsonc` mcp key |
+| Hooks | Pre/PostToolUse etc. | Not supported |
+| Agent frontmatter | `name`, `tools`, `model` | `description`, `mode`, `model`, `permission` |
+| Skill entry | Varies | Must be `SKILL.md` |
+
+### Usage Examples
+
+```
+@planner Add user authentication
+/tdd
+/code-review src/services/
+/build-fix
+/plan
+/verify
+```
+
+---
+
 ## Cross-Tool Feature Parity
 
 ECC is the **first plugin to maximize every major AI coding tool**. Here's how each harness compares:
 
-| Feature | Claude Code | Cursor IDE | Codex CLI | OpenCode |
-|---------|------------|------------|-----------|----------|
-| **Agents** | 21 | Shared (AGENTS.md) | Shared (AGENTS.md) | 12 |
+| Feature | Claude Code | Cursor IDE | Codex CLI | OpenCode | Kilo CLI |
+|---------|------------|------------|-----------|----------|----------|
+| **Agents** | 21 | Shared (AGENTS.md) | Shared (AGENTS.md) | 12 | 30 |
 | **Commands** | 52 | Shared | Instruction-based | 31 |
 | **Skills** | 102 | Shared | 10 (native format) | 37 |
 | **Hook Events** | 8 types | 15 types | None yet | 11 types |
