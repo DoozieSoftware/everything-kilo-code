@@ -13,6 +13,7 @@ module.exports = createInstallTargetAdapter({
   planOperations(input = {}, adapter) {
     const modules = Array.isArray(input.modules) ? input.modules : [];
     const operations = [];
+    const repoRoot = input.repoRoot || '';
 
     for (const module of modules) {
       const paths = Array.isArray(module.paths) ? module.paths : [];
@@ -21,82 +22,47 @@ module.exports = createInstallTargetAdapter({
         const normalizedSource = normalizeRelativePath(sourceRelativePath);
         const targetRoot = adapter.resolveRoot(input);
 
-        if (normalizedSource === '.agents') {
-          // .agents contains: AGENTS.md (agent), *.md files (agents), skills/ subdirectory
-          const sourceRoot = path.join(input.repoRoot || '', '.agents');
-          if (fs.existsSync(sourceRoot)) {
-            const entries = fs.readdirSync(sourceRoot, { withFileTypes: true });
-            for (const entry of entries) {
-              const entryPath = path.join(sourceRoot, entry.name);
-              if (entry.isFile() && entry.name.endsWith('.md')) {
-                // *.md files (including AGENTS.md) → agent/*.md
-                operations.push(createManagedOperation({
-                  moduleId: module.id,
-                  sourceRelativePath: path.join('.agents', entry.name),
-                  destinationPath: path.join(targetRoot, 'agent', entry.name),
-                  strategy: 'remap-copy',
-                }));
-              } else if (entry.isDirectory() && entry.name === 'skills') {
-                // .agents/skills/* → skill/* (Kilo's singular skills directory)
-                const skillsRoot = path.join(sourceRoot, 'skills');
-                const skillDirs = fs.readdirSync(skillsRoot, { withFileTypes: true })
-                  .filter(d => d.isDirectory());
-                for (const dir of skillDirs) {
-                  const skillPath = path.join(skillsRoot, dir.name);
-                  const files = listMdFiles(skillPath);
-                  for (const file of files) {
-                    operations.push(createManagedOperation({
-                      moduleId: module.id,
-                      sourceRelativePath: path.join('.agents', 'skills', dir.name, file),
-                      destinationPath: path.join(targetRoot, 'skill', dir.name, file),
-                      strategy: 'remap-copy',
-                    }));
-                  }
-                }
-              }
-            }
-          }
-        } else if (normalizedSource === 'agents') {
-          // agents/*.md → agent/*.md (singular)
-          const sourceRoot = path.join(input.repoRoot || '', 'agents');
-          if (fs.existsSync(sourceRoot)) {
-            const files = listMdFiles(sourceRoot);
+        if (normalizedSource === '.agents' || normalizedSource === 'agents') {
+          // Use pre-converted .kilo/agent/ as source (Kilo format)
+          const kiloAgentDir = path.join(repoRoot, '.kilo', 'agent');
+          if (fs.existsSync(kiloAgentDir)) {
+            const files = listMdFiles(kiloAgentDir);
             for (const file of files) {
               operations.push(createManagedOperation({
                 moduleId: module.id,
-                sourceRelativePath: path.join('agents', file),
+                sourceRelativePath: path.join('.kilo', 'agent', file),
                 destinationPath: path.join(targetRoot, 'agent', file),
                 strategy: 'remap-copy',
               }));
             }
           }
         } else if (normalizedSource === 'commands') {
-          // commands/*.md → command/*.md (singular)
-          const sourceRoot = path.join(input.repoRoot || '', 'commands');
-          if (fs.existsSync(sourceRoot)) {
-            const files = listMdFiles(sourceRoot);
+          // Use pre-converted .kilo/command/ as source (Kilo format)
+          const kiloCommandDir = path.join(repoRoot, '.kilo', 'command');
+          if (fs.existsSync(kiloCommandDir)) {
+            const files = listMdFiles(kiloCommandDir);
             for (const file of files) {
               operations.push(createManagedOperation({
                 moduleId: module.id,
-                sourceRelativePath: path.join('commands', file),
+                sourceRelativePath: path.join('.kilo', 'command', file),
                 destinationPath: path.join(targetRoot, 'command', file),
                 strategy: 'remap-copy',
               }));
             }
           }
         } else if (normalizedSource === 'skills') {
-          // skills/*/SKILL.md → skill/*/SKILL.md (singular)
-          const sourceRoot = path.join(input.repoRoot || '', 'skills');
-          if (fs.existsSync(sourceRoot)) {
-            const skillDirs = fs.readdirSync(sourceRoot, { withFileTypes: true })
+          // Use pre-converted .kilo/skill/ as source (Kilo format)
+          const kiloSkillDir = path.join(repoRoot, '.kilo', 'skill');
+          if (fs.existsSync(kiloSkillDir)) {
+            const skillDirs = fs.readdirSync(kiloSkillDir, { withFileTypes: true })
               .filter(d => d.isDirectory());
             for (const dir of skillDirs) {
-              const skillPath = path.join(sourceRoot, dir.name);
+              const skillPath = path.join(kiloSkillDir, dir.name);
               const files = listMdFiles(skillPath);
               for (const file of files) {
                 operations.push(createManagedOperation({
                   moduleId: module.id,
-                  sourceRelativePath: path.join('skills', dir.name, file),
+                  sourceRelativePath: path.join('.kilo', 'skill', dir.name, file),
                   destinationPath: path.join(targetRoot, 'skill', dir.name, file),
                   strategy: 'remap-copy',
                 }));
@@ -104,24 +70,27 @@ module.exports = createInstallTargetAdapter({
             }
           }
         } else if (normalizedSource.startsWith('skills/')) {
-          // Individual skill paths (e.g., skills/tdd-workflow) → skill/tdd-workflow
+          // Individual skill: use .kilo/skill/<name> as source
           const subPath = normalizedSource.slice('skills/'.length);
-          operations.push(createManagedOperation({
-            moduleId: module.id,
-            sourceRelativePath: normalizedSource,
-            destinationPath: path.join(targetRoot, 'skill', subPath),
-            strategy: 'preserve-relative-path',
-          }));
+          const kiloSkillPath = path.join(repoRoot, '.kilo', 'skill', subPath);
+          if (fs.existsSync(kiloSkillPath)) {
+            operations.push(createManagedOperation({
+              moduleId: module.id,
+              sourceRelativePath: path.join('.kilo', 'skill', subPath),
+              destinationPath: path.join(targetRoot, 'skill', subPath),
+              strategy: 'preserve-relative-path',
+            }));
+          }
         } else if (normalizedSource === 'rules') {
-          // rules/** → rules/** (same structure)
+          // Use pre-converted .kilo/rules/ as source
           operations.push(createManagedOperation({
             moduleId: module.id,
-            sourceRelativePath: normalizedSource,
+            sourceRelativePath: path.join('.kilo', 'rules'),
             destinationPath: path.join(targetRoot, 'rules'),
             strategy: 'preserve-relative-path',
           }));
         } else if (normalizedSource === 'mcp-configs') {
-          // mcp-configs → mcp directory (merged into kilo.jsonc by post-install)
+          // mcp-configs → mcp directory
           operations.push(createManagedOperation({
             moduleId: module.id,
             sourceRelativePath: normalizedSource,
