@@ -17,18 +17,31 @@ Not just configs. A complete system: 30 agents, 136 skills, 60 commands, rules, 
 
 ## Quick Start
 
+### Global Install (Recommended)
+
+Installs to `~/.config/kilo/` for use across all projects:
+
 ```bash
-# Clone
 git clone https://github.com/DoozieSoftware/everything-kilo-code.git
 cd everything-kilo-code
-
-# Install dependencies
 npm install
-
-# Install for Kilo CLI (full)
 ./install.sh --target kilo --profile full
+```
 
-# Or install specific languages
+### Project-Level Install
+
+Installs to `./.kilo/` in the current project only:
+
+```bash
+git clone https://github.com/DoozieSoftware/everything-kilo-code.git
+cd everything-kilo-code
+npm install
+./install.sh --target kilo --profile full --project
+```
+
+### Language-Specific Install
+
+```bash
 ./install.sh --target kilo typescript php python
 ```
 
@@ -209,6 +222,30 @@ everything-kilo-code/
 ```bash
 cd everything-kilo-code
 git pull origin main
+./install.sh --target kilo --profile full
+```
+
+## Syncing from Upstream (everything-claude-code)
+
+EKC is forked from [everything-claude-code](https://github.com/affaan-m/everything-claude-code). When the upstream repo publishes new agents, skills, or commands, you can sync them into EKC. See [SYNC.md](SYNC.md) for the full migration guide.
+
+Quick sync:
+
+```bash
+# Add upstream remote (once)
+git remote add upstream https://github.com/affaan-m/everything-claude-code.git
+
+# Fetch and review upstream changes
+git fetch upstream
+git log --oneline upstream/main..HEAD
+
+# Cherry-pick or merge specific upstream commits
+git cherry-pick <commit-hash>
+
+# Convert new components to Kilo format
+node scripts/convert-to-kilo.js
+
+# Reinstall
 ./install.sh --target kilo --profile full
 ```
 
