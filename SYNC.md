@@ -1,6 +1,16 @@
 # Syncing Everything Kilo Code from Upstream
 
-EKC is forked from [everything-claude-code](https://github.com/affaan-m/everything-claude-code) (ECC). This guide explains how to pull upstream changes and convert them to Kilo CLI format.
+EKC is forked from [everything-claude-code](https://github.com/affaan-m/everything-claude-code) (ECC). This is a **one-way sync** — we pull upstream changes and convert them to Kilo CLI format. We do NOT submit PRs back to the original repo.
+
+```
+everything-claude-code (upstream, by Affaan Mustafa)
+        │
+        │  one-way pull + convert
+        ▼
+everything-kilo-code (our fork, by DoozieSoftware)
+```
+
+This guide explains how to pull upstream changes and convert them to Kilo CLI format.
 
 ---
 
